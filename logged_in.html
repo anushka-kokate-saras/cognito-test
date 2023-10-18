@@ -8,7 +8,6 @@
 <body>
     <h3>You have successfully logged in</h3>
     <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html"> Logout </a></p>
-    
 </body>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,26 +19,23 @@
     const clientSecret = '54u6q3rc38no29soft84e6m8kigb5uvjv53g6deii6poq9oj8w'; // Your Cognito Client Secret
     const redirectUri = 'https://anushka-kokate-saras.github.io/cognito-test/logged_in.html'; // Your Redirect URI
     
-    // const formData = new URLSearchParams();
-    // formData.append('code', code);
-    // formData.append('grant_type', 'authorization_code');
-    // formData.append('redirect_uri', redirectUri);
-    var params = {
-        "code": getCode,
-        "grant_type":"authorization_code",
-        "redirect_uri":"https://anushka-kokate-saras.github.io/cognito-test/logged_in.html"
-    }
-
+    const formData = new URLSearchParams();
+    formData.append('grant_type', 'authorization_code');
+    formData.append('code', getCode);
+    formData.append('redirect_uri', redirectUri);
+    
+    // Combine client ID and client secret into a Base64-encoded string
+    const base64Client = btoa(`${clientId}:${clientSecret}`);
+    
     // Add the client credentials to the headers
     const headers = {
-        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2I1dXZqdjUzZzZkZWllNnBvcTlvajhw",
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Basic ${base64Client}`,
     };
-
+    
     fetch(tokenEndpoint, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(params),
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
@@ -49,6 +45,5 @@
     .catch(error => {
         console.error(error);
     });
-
 </script>
 </html>

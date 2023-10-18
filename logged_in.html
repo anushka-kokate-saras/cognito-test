@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>You have successfully logged in</h3>
+    <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/oauth2/authorize?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=http%3A%2F%2Flocalhost%3A5500%2Flogged_in.html"> Logout </a></p>
+    
+</body>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const getCode = urlParams.get("code");
+    console.log(getCode);
+    
+    const tokenEndpoint = 'https://testappdemo.auth.us-east-2.amazoncognito.com/oauth2/token';
+    const clientId = '7nq57bftb4bqj0jlvjpk8716tv'; // Your Cognito Client ID
+    const clientSecret = '54u6q3rc38no29soft84e6m8kigb5uvjv53g6deii6poq9oj8w'; // Your Cognito Client Secret
+    const redirectUri = 'http://localhost:5500/logged_in.html'; // Your Redirect URI
+    
+    // const formData = new URLSearchParams();
+    // formData.append('code', code);
+    // formData.append('grant_type', 'authorization_code');
+    // formData.append('redirect_uri', redirectUri);
+    var params = {
+        "code": getCode,
+        "grant_type":"authorization_code",
+        "redirect_uri":"http://localhost:5500/logged_in.html"
+    }
+
+    // Add the client credentials to the headers
+    const headers = {
+        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2I1dXZqdjUzZzZkZWllNnBvcTlvajhw",
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    fetch(tokenEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(params),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const idToken = data.id_token;
+        console.log(idToken);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+</script>
+</html>

@@ -16,7 +16,7 @@
     
     const tokenEndpoint = 'https://testappdemo.auth.us-east-2.amazoncognito.com/oauth2/token';
     const clientId = '7nq57bftb4bqj0jlvjpk8716tv'; // Your Cognito Client ID
-    const clientSecret = '54u6q3rc38no29soft84e6m8kigb5uvjv53g6deii6poq9oj8w'; // Your Cognito Client Secret
+    const clientSecret = '545u6q3rc38no29soft84e6m8kigb5uvjv53g6deie6poq9oj8p'; // Your Cognito Client Secret
     const redirectUri = 'https://anushka-kokate-saras.github.io/cognito-test/logged_in.html'; // Your Redirect URI
     
     const formData = new URLSearchParams();
@@ -24,12 +24,9 @@
     formData.append('code', getCode);
     formData.append('redirect_uri', redirectUri);
     
-    // Combine client ID and client secret into a Base64-encoded string
-    const base64Client = btoa(`${clientId}:${clientSecret}`);
-    
     // Add the client credentials to the headers
     const headers = {
-        'Authorization': `Basic ${base64Client}`,
+        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2I1dXZqdjUzZzZkZWllNnBvcTlvajhw",
     };
     
     fetch(tokenEndpoint, {

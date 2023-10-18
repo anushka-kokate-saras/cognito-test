@@ -9,7 +9,6 @@
     <h3>You have successfully logged in</h3>
     <button id="testApiButton">Test API Call</button>
     <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html"> Logout </a></p>
-    <div id="apiResponse"></div> <!-- This div will display the API response -->
 </body>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,7 +27,7 @@
     
     // Add the client credentials to the headers
     const headers = {
-        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2BjNnBvcTlvajhw",
+        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2I1dXZqdjUzZzZkZWllNnBvcTlvajhw",
         'Content-Type': 'application/x-www-form-urlencoded'
     };
     let idToken;    
@@ -58,9 +57,8 @@
         })
         .then(response => response.json())
         .then(apiData => {
-            // Display the API response on the webpage
-            const apiResponseDiv = document.getElementById('apiResponse');
-            apiResponseDiv.textContent = JSON.stringify(apiData, null, 2);
+            // Handle the API response data
+            console.log(apiData);
         })
         .catch(apiError => {
             console.error(apiError);

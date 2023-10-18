@@ -8,7 +8,10 @@
 <body>
     <h3>You have successfully logged in</h3>
     <button id="testApiButton">Test API Call</button>
-    <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html"> Logout </a></p>
+    <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html">Logout</a></p>
+    
+    <!-- Add a div element to display the API response -->
+    <div id="apiResponse"></div>
 </body>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -44,10 +47,10 @@
     .catch(error => {
         console.error(error);
     });
-    // Add an event listener to the "Test API Call" button
+
+    // Inside the event listener for the "Test API Call" button
     document.getElementById("testApiButton").addEventListener("click", () => {
         // Make your API call using the stored ID token
-        // Replace 'your_api_endpoint' and 'your_api_params' with your actual API details
         fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/getdata', {
             method: 'GET',
             headers: {
@@ -59,6 +62,10 @@
         .then(apiData => {
             // Handle the API response data
             console.log(apiData);
+
+            // Display the API response in the div element
+            const apiResponseDiv = document.getElementById("apiResponse");
+            apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
         })
         .catch(apiError => {
             console.error(apiError);

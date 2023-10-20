@@ -6,10 +6,35 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>You have successfully logged in</h3>
-    <button id="testApiButton">Test API Call</button>
+    <h1>You have successfully logged in</h1>
+    <br>
+    <input type="text" id="inputId" placeholder="ID">
+    <br>
+    <input type="text" id="inputMessage" placeholder="Message">
+    <br>
+    <button id="PostApiButton">Send Data</button>
     <!-- Add a div element to display the API response -->
     <div id="apiResponse"></div>
+    <br>
+    <input type="text" id="updateInputId" placeholder="ID">
+    <br>
+    <input type="text" id="updateInputMessage" placeholder="Message">
+    <br>
+    <button id="UpdateApiButton">Update Data</button>
+    <!-- Add a div element to display the API response -->
+    <div id="updateApiResponse"></div>
+    <br>
+    <input type="text" id="deleteInputId" placeholder="ID">
+    <br>
+    <button id="DeleteApiButton">Delete Data</button>
+    <!-- Add a div element to display the API response -->
+    <div id="deleteApiResponse"></div>
+    <br>
+    <input type="text" id="getInputId" placeholder="ID">
+    <br>
+    <button id="GetApiButton">Get Data</button>
+    <!-- Add a div element to display the API response -->
+    <div id="getApiResponse"></div>
     <br>
     <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html">Logout</a></p>
 
@@ -17,7 +42,7 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const getCode = urlParams.get("code");
-    console.log(getCode);
+    // console.log(getCode);
     
     const tokenEndpoint = 'https://testappdemo.auth.us-east-2.amazoncognito.com/oauth2/token';
     const clientId = '7nq57bftb4bqj0jlvjpk8716tv'; // Your Cognito Client ID
@@ -43,34 +68,144 @@
     .then(response => response.json())
     .then(data => {
         idToken = data.id_token;
-        console.log(idToken);
+        // console.log(idToken);
     })
     .catch(error => {
         console.error(error);
     });
 
     // Inside the event listener for the "Test API Call" button
-    document.getElementById("testApiButton").addEventListener("click", () => {
-        // Make your API call using the stored ID token
-        fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/getdata', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${idToken}` // Include the ID token in the 'Authorization' header
-            },
-            // Add any additional parameters or configurations for your API call
-        })
-        .then(response => response.json())
-        .then(apiData => {
-            // Handle the API response data
-            console.log(apiData);
+    document.getElementById("PostApiButton").addEventListener("click", () => {
+    // Get values from input fields
+    const inputId = document.getElementById("inputId").value;
+    const inputMessage = document.getElementById("inputMessage").value;
 
-            // Display the API response in the div element
-            const apiResponseDiv = document.getElementById("apiResponse");
-            apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
-        })
-        .catch(apiError => {
-            console.error(apiError);
-        });
+    // Create the request body JSON
+    const requestBody = {
+        id: inputId,
+        message: inputMessage
+    };
+
+    // Make your API call using the stored ID token
+    fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/dynamodbPost', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${idToken}`, // Include the ID token in the 'Authorization' header
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(requestBody) // Convert the request body to JSON
+    })
+    .then(response => response.json())
+    .then(apiData => {
+        // Handle the API response data
+        console.log(apiData);
+
+        // Display the API response in the div element
+        const apiResponseDiv = document.getElementById("apiResponse");
+        apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
+    })
+    .catch(apiError => {
+        console.error(apiError);
     });
+});
+
+    document.getElementById("UpdateApiButton").addEventListener("click", () => {
+    // Get values from input fields
+    const inputId = document.getElementById("updateInputId").value;
+    const inputMessage = document.getElementById("updateInputMessage").value;
+
+    // Create the request body JSON
+    const requestBody = {
+        id: inputId,
+        message: inputMessage
+    };
+
+    // Make your API call using the stored ID token
+    fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/dynamodbUpdate', {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${idToken}`, // Include the ID token in the 'Authorization' header
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(requestBody) // Convert the request body to JSON
+    })
+    .then(response => response.json())
+    .then(apiData => {
+        // Handle the API response data
+        console.log(apiData);
+
+        // Display the API response in the div element
+        const apiResponseDiv = document.getElementById("UpdateApiButton");
+        apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
+    })
+    .catch(apiError => {
+        console.error(apiError);
+    });
+});
+
+    document.getElementById("DeleteApiButton").addEventListener("click", () => {
+    // Get values from input fields
+    const inputId = document.getElementById("DeleteInputId").value;
+
+    // Create the request body JSON
+    const requestBody = {
+        id: inputId
+    };
+
+    // Make your API call using the stored ID token
+    fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/dynamodbDelete', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${idToken}`, // Include the ID token in the 'Authorization' header
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(requestBody) // Convert the request body to JSON
+    })
+    .then(response => response.json())
+    .then(apiData => {
+        // Handle the API response data
+        console.log(apiData);
+
+        // Display the API response in the div element
+        const apiResponseDiv = document.getElementById("deleteApiResponse");
+        apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
+    })
+    .catch(apiError => {
+        console.error(apiError);
+    });
+});
+
+    document.getElementById("GetApiButton").addEventListener("click", () => {
+    // Get values from input fields
+    const inputId = document.getElementById("getInputId").value;
+
+    // Create the request body JSON
+    const requestBody = {
+        id: inputId
+    };
+
+    // Make your API call using the stored ID token
+    fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/dynamodbGet', {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${idToken}`, // Include the ID token in the 'Authorization' header
+            'Content-Type': 'application/json' // Set the content type to JSON
+        },
+        body: JSON.stringify(requestBody) // Convert the request body to JSON
+    })
+    .then(response => response.json())
+    .then(apiData => {
+        // Handle the API response data
+        console.log(apiData);
+
+        // Display the API response in the div element
+        const apiResponseDiv = document.getElementById("getApiResponse");
+        apiResponseDiv.innerHTML = JSON.stringify(apiData, null, 2);
+    })
+    .catch(apiError => {
+        console.error(apiError);
+    });
+});
+
 </script>
 </html>

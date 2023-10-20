@@ -7,8 +7,9 @@
 </head>
 <body>
     <h3>You have successfully logged in</h3>
+    <button id="testApiButton">Test API Call</button>
     <p><a href="https://testappdemo.auth.us-east-2.amazoncognito.com/login?client_id=7nq57bftb4bqj0jlvjpk8716tv&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+phone+profile&redirect_uri=https%3A%2F%2Fanushka-kokate-saras.github.io%2Fcognito-test%2Flogged_in.html"> Logout </a></p>
-    
+    <div id="apiResponse"></div> <!-- This div will display the API response -->
 </body>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -17,38 +18,53 @@
     
     const tokenEndpoint = 'https://testappdemo.auth.us-east-2.amazoncognito.com/oauth2/token';
     const clientId = '7nq57bftb4bqj0jlvjpk8716tv'; // Your Cognito Client ID
-    const clientSecret = '54u6q3rc38no29soft84e6m8kigb5uvjv53g6deii6poq9oj8w'; // Your Cognito Client Secret
+    const clientSecret = '545u6q3rc38no29soft84e6m8kigb5uvjv53g6deie6poq9oj8p'; // Your Cognito Client Secret
     const redirectUri = 'https://anushka-kokate-saras.github.io/cognito-test/logged_in.html'; // Your Redirect URI
     
-    // const formData = new URLSearchParams();
-    // formData.append('code', code);
-    // formData.append('grant_type', 'authorization_code');
-    // formData.append('redirect_uri', redirectUri);
-    var params = {
-        "code": getCode,
-        "grant_type":"authorization_code",
-        "redirect_uri":"http://localhost:5500/logged_in.html"
-    }
-
+    const formData = new URLSearchParams();
+    formData.append('grant_type', 'authorization_code');
+    formData.append('code', getCode);
+    formData.append('redirect_uri', redirectUri);
+    
     // Add the client credentials to the headers
     const headers = {
-        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2I1dXZqdjUzZzZkZWllNnBvcTlvajhw",
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': "Basic N25xNTdiZnRiNGJxajBqbHZqcGs4NzE2dHY6NTQ1dTZxM3JjMzhubzI5c29mdDg0ZTZtOGtpZ2BjNnBvcTlvajhw",
+        'Content-Type': 'application/x-www-form-urlencoded'
     };
-
+    let idToken;    
     fetch(tokenEndpoint, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify(params),
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
-        const idToken = data.id_token;
+        idToken = data.id_token;
         console.log(idToken);
     })
     .catch(error => {
         console.error(error);
     });
-
+    // Add an event listener to the "Test API Call" button
+    document.getElementById("testApiButton").addEventListener("click", () => {
+        // Make your API call using the stored ID token
+        // Replace 'your_api_endpoint' and 'your_api_params' with your actual API details
+        fetch('https://wyk5i4n39k.execute-api.us-east-2.amazonaws.com/test/getdata', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${idToken}` // Include the ID token in the 'Authorization' header
+            },
+            // Add any additional parameters or configurations for your API call
+        })
+        .then(response => response.json())
+        .then(apiData => {
+            // Display the API response on the webpage
+            const apiResponseDiv = document.getElementById('apiResponse');
+            apiResponseDiv.textContent = JSON.stringify(apiData, null, 2);
+        })
+        .catch(apiError => {
+            console.error(apiError);
+        });
+    });
 </script>
 </html>
